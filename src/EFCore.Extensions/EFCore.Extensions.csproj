@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6</TargetFramework>
+	<Nullable>enable</Nullable>
+	<LangVersion>10</LangVersion>
+	  
+	<PackageId>CC.EFCore.Extensions</PackageId>
+	<Authors>CocaineCoder</Authors>
+	<Title>efcore extensions</Title>
+	<PackageTags>efcore;query;page;null</PackageTags>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageIcon>logo.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/cocaine-coder/efcore-extensions.git</RepositoryUrl>
+	<PackageProjectUrl>https://github.com/cocaine-coder/efcore-extensions.git</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.7" />
+  </ItemGroup>
+
+</Project>
