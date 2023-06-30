@@ -9,33 +9,9 @@ public interface IPageQueryRequest
 
 public class PageQueryRequest : IPageQueryRequest
 {
-    private int _count;
-    private int _page;
+    public int Page { get; set; }
 
-    public int Page
-    {
-        get => _page;
-
-        set
-        {
-            if (value <= 0)
-                value = 1;
-            _page = value;
-        }
-    }
-
-    public int Count
-    {
-        get => _count;
-
-        set
-        {
-            if (value is <= 0 or > 20)
-                value = 20;
-
-            _count = value;
-        }
-    }
+    public int Count { get; set; }
 }
 
 /// <summary>

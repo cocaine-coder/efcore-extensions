@@ -10,13 +10,15 @@ public static class IQueryableExtension
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entities"></param>
     /// <param name="queryParams"></param>
+    /// <param name="maxCount">单页最大值</param>
     /// <returns></returns>
     public static async Task<PageQueryResponse<TEntity>> QueryPageAsync<TEntity>(
         this IQueryable<TEntity> entities,
-        IPageQueryRequest queryParams)
+        IPageQueryRequest queryParams,
+        int maxCount = 20)
     where TEntity : class
     {
-        var (total, query) = await entities.QueryPage(queryParams);
+        var (total, query) = await entities.QueryPage(queryParams, maxCount);
 
         return new PageQueryResponse<TEntity>(queryParams.Page, queryParams.Count, total, await query.ToListAsync());
     }
@@ -29,15 +31,17 @@ public static class IQueryableExtension
     /// <param name="entities"></param>
     /// <param name="queryParams"></param>
     /// <param name="dbSelector"></param>
+    /// <param name="maxCount">单页最大值</param>
     /// <returns></returns>
     public static async Task<PageQueryResponse<TDto>> QueryPageAsync<TEntity, TDto>(
         this IQueryable<TEntity> entities,
         IPageQueryRequest queryParams,
-        Expression<Func<TEntity, TDto>> dbSelector)
+        Expression<Func<TEntity, TDto>> dbSelector,
+        int maxCount = 20)
     where TEntity : class
     where TDto : class
     {
-        var (total, query) = await entities.QueryPage(queryParams);
+        var (total, query) = await entities.QueryPage(queryParams, maxCount);
         var ret = await query.Select(dbSelector).ToListAsync();
 
         return new PageQueryResponse<TDto>(queryParams.Page, queryParams.Count, total, ret);
@@ -51,15 +55,17 @@ public static class IQueryableExtension
     /// <param name="entities"></param>
     /// <param name="queryParams"></param>
     /// <param name="afterDbSelector"></param>
+    /// <param name="maxCount">单页最大值</param>
     /// <returns></returns>
     public static async Task<PageQueryResponse<TDto>> QueryPageAsync<TEntity, TDto>(
         this IQueryable<TEntity> entities,
         IPageQueryRequest queryParams,
-        Func<TEntity, TDto> afterDbSelector)
+        Func<TEntity, TDto> afterDbSelector,
+        int maxCount = 20)
     where TEntity : class
     where TDto : class
     {
-        var (total, query) = await entities.QueryPage(queryParams);
+        var (total, query) = await entities.QueryPage(queryParams, maxCount);
         var ret = (await query.ToListAsync()).Select(afterDbSelector);
 
         return new PageQueryResponse<TDto>(queryParams.Page, queryParams.Count, total, ret);
@@ -67,11 +73,15 @@ public static class IQueryableExtension
 
     private static async Task<(int total, IQueryable<TEntity> query)> QueryPage<TEntity>(
         this IQueryable<TEntity> entities,
-        IPageQueryRequest queryParams)
+        IPageQueryRequest queryParams,
+        int maxCount = 20)
     where TEntity : class
     {
+        var count = queryParams.Count <= 0 || queryParams.Count > maxCount ? maxCount : queryParams.Count;
+        var page = queryParams.Page <= 0 ? 1 : queryParams.Page;
+
         return (await entities.CountAsync(),
-            entities.Skip((queryParams.Page - 1) * queryParams.Count).Take(queryParams.Count));
+            entities.Skip((page - 1) * count).Take(count));
     }
 
     #endregion QueryPage

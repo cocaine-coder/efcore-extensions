@@ -6,6 +6,7 @@
 	<LangVersion>10</LangVersion>
 	  
 	<PackageId>CC.EFCore.Extensions</PackageId>
+	<Version>1.0.1</Version>
 	<Authors>CocaineCoder</Authors>
 	<Title>efcore extensions</Title>
 	<PackageTags>efcore;query;page;null</PackageTags>
