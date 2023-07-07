@@ -80,8 +80,8 @@ public static class IQueryableExtension
         var count = queryParams.Count <= 0 || queryParams.Count > maxCount ? maxCount : queryParams.Count;
         var page = queryParams.Page <= 0 ? 1 : queryParams.Page;
 
-        return (await entities.CountAsync(),
-            entities.Skip((page - 1) * count).Take(count));
+        var total = await entities.CountAsync();
+        return maxCount <= 0 ? (total, entities) : (total, entities.Skip((page - 1) * count).Take(count));
     }
 
     #endregion QueryPage
